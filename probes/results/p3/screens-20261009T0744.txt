@@ -1,0 +1,5 @@
+screen 0 appkit_frame=(0.0, 0.0, 1512.0, 982.0) appkit_visible=(0.0, 0.0, 1512.0, 949.0) topleft_frame=0.0,0.0,1512.0,982.0 topleft_visible=0.0,33.0,1512.0,949.0 scale=2.0
+screen 1 appkit_frame=(1512.0, 0.0, 1920.0, 1080.0) appkit_visible=(1512.0, 0.0, 1920.0, 1080.0) topleft_frame=1512.0,-98.0,1920.0,1080.0 topleft_visible=1512.0,-98.0,1920.0,1080.0 scale=1.0
+screen 2 appkit_frame=(3432.0, 0.0, 1080.0, 1920.0) appkit_visible=(3432.0, 0.0, 1080.0, 1920.0) topleft_frame=3432.0,-938.0,1080.0,1920.0 topleft_visible=3432.0,-938.0,1080.0,1920.0 scale=1.0
+screen 3 appkit_frame=(-408.0, 982.0, 1920.0, 1080.0) appkit_visible=(-408.0, 982.0, 1920.0, 1080.0) topleft_frame=-408.0,-1080.0,1920.0,1080.0 topleft_visible=-408.0,-1080.0,1920.0,1080.0 scale=1.0
+separate_spaces=false

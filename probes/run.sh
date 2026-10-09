@@ -69,11 +69,13 @@ p3)
     echo "TextEdit already runs with the owner's documents: P3 skips it (G6)"
   else
     : > "$scratch/p3-document.txt"
-    open -a TextEdit "$scratch/p3-document.txt"
+    open -g -a TextEdit "$scratch/p3-document.txt"
   fi
-  [ "$calculator_was_running" = yes ] || open -a Calculator
-  start_helper 120
-  sleep 2
+  # Launched in the background (-g), never activated: AX needs no focus, and the owner's
+  # keystrokes must keep going to the owner's app while the probe runs.
+  [ "$calculator_was_running" = yes ] || open -g -a Calculator
+  open -g -n "$build/SCHelper.app" --args "$scratch/helper.txt" 120
+  sleep 3
   helper=$(pgrep -nx SCHelper)
   {
     echo "# P3 move $stamp host identity"

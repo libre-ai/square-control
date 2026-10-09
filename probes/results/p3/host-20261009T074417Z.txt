@@ -1,0 +1,50 @@
+# P3 move 20261009T074417Z host identity
+target pid=60790 enhanced_ui=false initial=200.0,330.0,640.0,452.0 reads=3 planned=0.0,33.0,756.0,949.0
+rep=1 apply_us=13641 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=48313 restored=200.0,330.0,640.0,452.0
+rep=2 apply_us=32005 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=31922 restored=200.0,330.0,640.0,452.0
+rep=3 apply_us=33551 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=28262 restored=200.0,330.0,640.0,452.0
+rep=4 apply_us=11381 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=37546 restored=200.0,330.0,640.0,452.0
+rep=5 apply_us=22568 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=18901 restored=200.0,330.0,640.0,452.0
+rep=6 apply_us=17387 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=24254 restored=200.0,330.0,640.0,452.0
+rep=7 apply_us=27720 error=- obtained=0.0,33.0,756.0,949.0 reads=3 delta=0.0,0.0,0.0,0.0 restore_us=25748 restored=200.0,330.0,640.0,452.0
+rep=8 apply_us=23449 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=18551 restored=200.0,330.0,640.0,452.0
+rep=9 apply_us=15179 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=19205 restored=200.0,330.0,640.0,452.0
+rep=10 apply_us=5896 error=- obtained=-0.0,33.0,756.0,949.0 reads=3 delta=-0.0,0.0,0.0,0.0 restore_us=9418 restored=200.0,330.0,640.0,452.0
+summary pid=60790 repetitions=10 stable_readbacks=10
+target pid=60778 enhanced_ui=false initial=3549.0,-772.0,656.0,422.0 reads=3 planned=3432.0,-938.0,540.0,1920.0
+rep=1 apply_us=50026 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=31503 restored=3549.0,-772.0,656.0,422.0
+rep=2 apply_us=15927 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=1575 restored=3549.0,-772.0,656.0,422.0
+rep=3 apply_us=3068 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=2892 restored=3549.0,-772.0,656.0,422.0
+rep=4 apply_us=48076 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=36465 restored=3549.0,-772.0,656.0,422.0
+rep=5 apply_us=34033 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=46242 restored=3549.0,-772.0,656.0,422.0
+rep=6 apply_us=20904 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=31106 restored=3549.0,-772.0,656.0,422.0
+rep=7 apply_us=26145 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=15192 restored=3549.0,-772.0,656.0,422.0
+rep=8 apply_us=18419 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=30129 restored=3549.0,-772.0,656.0,422.0
+rep=9 apply_us=20685 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=30211 restored=3549.0,-772.0,656.0,422.0
+rep=10 apply_us=13845 error=- obtained=3432.0,-908.0,540.0,1890.0 reads=3 delta=0.0,30.0,0.0,-30.0 restore_us=22724 restored=3549.0,-772.0,656.0,422.0
+summary pid=60778 repetitions=10 stable_readbacks=10
+target pid=60788 enhanced_ui=false initial=2549.0,217.0,230.0,408.0 reads=3 planned=1512.0,-98.0,960.0,1080.0
+error pid=60788 axFailure(-25200)
+# P3 frozen 20261009T074417Z host identity
+frozen pid=60790 responsive pid=60778 timeout_s=0.25
+rep=1 frozen_read=timeout frozen_us=252456 responsive_move=ok move_us=4247 wall_us=252484
+rep=2 frozen_read=timeout frozen_us=255042 responsive_move=ok move_us=6602 wall_us=255061
+rep=3 frozen_read=timeout frozen_us=255050 responsive_move=ok move_us=14144 wall_us=255070
+rep=4 frozen_read=timeout frozen_us=252229 responsive_move=ok move_us=9820 wall_us=252250
+rep=5 frozen_read=timeout frozen_us=254779 responsive_move=ok move_us=10462 wall_us=254802
+rep=6 frozen_read=timeout frozen_us=251041 responsive_move=ok move_us=5048 wall_us=251064
+rep=7 frozen_read=timeout frozen_us=255056 responsive_move=ok move_us=15412 wall_us=255099
+rep=8 frozen_read=timeout frozen_us=253706 responsive_move=ok move_us=11921 wall_us=253734
+rep=9 frozen_read=timeout frozen_us=253937 responsive_move=ok move_us=15111 wall_us=253962
+rep=10 frozen_read=timeout frozen_us=253618 responsive_move=ok move_us=11132 wall_us=253640
+rep=11 frozen_read=timeout frozen_us=253543 responsive_move=ok move_us=15436 wall_us=253571
+rep=12 frozen_read=timeout frozen_us=255064 responsive_move=ok move_us=12155 wall_us=255088
+rep=13 frozen_read=timeout frozen_us=255056 responsive_move=ok move_us=14475 wall_us=255077
+rep=14 frozen_read=timeout frozen_us=251159 responsive_move=ok move_us=4758 wall_us=251178
+rep=15 frozen_read=timeout frozen_us=252025 responsive_move=ok move_us=20318 wall_us=252050
+rep=16 frozen_read=timeout frozen_us=254321 responsive_move=ok move_us=11175 wall_us=254343
+rep=17 frozen_read=timeout frozen_us=255041 responsive_move=ok move_us=14160 wall_us=255061
+rep=18 frozen_read=timeout frozen_us=254542 responsive_move=ok move_us=6436 wall_us=254564
+rep=19 frozen_read=timeout frozen_us=255041 responsive_move=ok move_us=16173 wall_us=255062
+rep=20 frozen_read=timeout frozen_us=255043 responsive_move=ok move_us=13073 wall_us=255063
+summary repetitions=20 frozen_reads_bounded_300ms=20 responsive_moves_under_100ms=20 main_actor_max_gap_us=12593 read_after_sigcont=ok 200.0,330.0,640.0,452.0
