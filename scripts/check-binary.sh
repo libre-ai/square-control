@@ -64,11 +64,32 @@ strings -a "$executable" > "$work/strings.txt" || { echo "UNREADABLE: strings"; 
 string_count=$(wc -l < "$work/strings.txt" | tr -d ' ')
 grep -q 'sc-e2e' "$work/strings.txt" && fail "E2E channel string present (sc-e2e)"
 grep -Eq 'CFBundleURLSchemes|square-control://' "$work/strings.txt" && fail "URL scheme string present"
-# Needle assembled from two parts so that this file does not carry the literal it forbids.
-home_prefix="/Us""ers/"
-users=$(grep -c -F -- "$home_prefix" "$work/strings.txt" || true)
-[ "$users" -gt 0 ] && fail "$users string(s) with a machine path ($home_prefix)"
+# Machine-path needles (owner decision Y40): generic prefixes plus this machine's own.
+# Counted on raw bytes with rg -a, not on `strings`, which drops short runs.
+cargo_home="${CARGO_HOME:-$HOME/.cargo}"
+rustup_home="${RUSTUP_HOME:-$HOME/.rustup}"
+count_in() { rg -a -o -F -- "$2" "$1" | wc -l | tr -d ' '; }
+scan_paths() { # <file> <label> <generic: yes|no>
+  [ -r "$1" ] && [ -s "$1" ] || { echo "UNREADABLE: $2"; exit 2; }
+  scanned_files=$((scanned_files + 1))
+  scanned_bytes=$((scanned_bytes + $(wc -c < "$1" | tr -d ' ')))
+  if [ "$3" = yes ]; then set -- "$1" "$2" "/Us""ers/" '/home/' '.cargo/registry' '.rustup'; else set -- "$1" "$2"; fi
+  file="$1"; label="$2"; shift 2
+  for needle in "$@" "$HOME" "$cargo_home" "$rustup_home" "$root"; do
+    hits=$(count_in "$file" "$needle")
+    # Only the generic needles are printed verbatim; machine values are labelled.
+    case "$needle" in "$HOME") name=HOME ;; "$cargo_home") name=CARGO_HOME ;; "$rustup_home") name=RUSTUP_HOME ;; "$root") name="repository root" ;; *) name="$needle" ;; esac
+    [ "$hits" -gt 0 ] && fail "$label: $hits x $name"
+  done
+}
+command -v rg >/dev/null || { echo "UNREADABLE: rg is required for the machine-path scan"; exit 2; }
+scanned_files=0; scanned_bytes=0
+scan_paths "$executable" "executable" yes
+# The static core library linked into the executable. Its prebuilt std and
+# compiler-builtins objects carry the Rust project's own CI path, which is not a
+# path of this machine, so only this machine's prefixes are counted there.
+scan_paths "$root/target/release/libsc_ffi.a" "libsc_ffi.a" no
 
-echo "examined: imported_symbols=$symbols libraries=$libraries linked=$linked entitlements=$entitlements plist_keys=$plist_keys strings=$string_count"
+echo "examined: imported_symbols=$symbols libraries=$libraries linked=$linked entitlements=$entitlements plist_keys=$plist_keys strings=$string_count path_scan_files=$scanned_files path_scan_bytes=$scanned_bytes"
 echo "violations=$violations"
 [ "$violations" -eq 0 ]
