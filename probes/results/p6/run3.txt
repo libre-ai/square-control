@@ -1,0 +1,15 @@
+## release bundle (commit d498c22)
+VIOLATION: symbol outside the closed list: Foundation _$sSS10FoundationE36_unconditionallyBridgeFromObjectiveCySSSo8NSStringCSgFZ
+VIOLATION: symbol outside the closed list: Foundation _OBJC_CLASS_$_NSBundle
+examined: imported_symbols=352 libraries=27 linked=27 entitlements=0 plist_keys=12 strings=1099
+violations=2
+exit=1
+## e2e bundle (must fail)
+VIOLATION: E2E channel string present (sc-e2e)
+examined: imported_symbols=362 libraries=27 linked=27 entitlements=0 plist_keys=12 strings=1102
+violations=13
+exit=0
+## release bundle after reviewed allowlist update (+2: NSBundle, NSString bridge)
+examined: imported_symbols=352 libraries=27 linked=27 entitlements=0 plist_keys=12 strings=1099
+violations=0
+exit=0
