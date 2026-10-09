@@ -1,0 +1,15 @@
+## e2e bundle (must fail on sc-e2e)
+VIOLATION: symbol outside the closed list: libswiftCore _$ss11CommandLineO9argumentsSaySSGvgZ
+VIOLATION: symbol outside the closed list: libswiftCore _$ss15InstantProtocolP8advanced2byx8DurationQz_tFTj
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss15ContinuousClockV7InstantVMa
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss15ContinuousClockV7InstantVs0C8ProtocolsMc
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss15ContinuousClockVMa
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss15ContinuousClockVs0B0sMc
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss5ClockP3now7InstantQzvgTj
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss5ClockP5sleep5until9tolerancey7InstantQz_8DurationQzSgtYaKFTj
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss5ClockP5sleep5until9tolerancey7InstantQz_8DurationQzSgtYaKFTjTu
+VIOLATION: symbol outside the closed list: libswift_Concurrency _$ss5ClockPss010ContinuousA0VRszrlE10continuousADvgZ
+VIOLATION: E2E channel string present (sc-e2e)
+examined: imported_symbols=360 libraries=27 linked=27 entitlements=0 plist_keys=12 strings=1103
+violations=11
+exit=1

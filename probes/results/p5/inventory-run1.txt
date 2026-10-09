@@ -1,0 +1,12 @@
+## M1 csrutil status
+System Integrity Protection status: enabled.
+## M2 tccutil usage
+tccutil: Usage: tccutil reset SERVICE [BUNDLE_ID]
+## M5 profiles status -type enrollment
+Enrolled via DEP: No
+MDM enrollment: No
+## M3 host-identity preflight (CLI from the shell, responsible = Zed.app)
+ax_trusted=true listen_preflight=true post_preflight=true screen_preflight=true
+## M3 same API inside TapProbe.app launched by open (P1 S0)
+preflight ax_trusted=false listen_event=false post_event=false
+preflight_after ax_trusted=false listen_event=false

@@ -1,0 +1,6 @@
+## mutant: release bundle + CFBundleURLTypes inserted (must fail)
+VIOLATION: signature does not verify: <scratch>/mutant.app: invalid Info.plist (plist or signature have been modified)
+VIOLATION: Info.plist declares CFBundleURLTypes
+examined: imported_symbols=350 libraries=27 linked=27 entitlements=0 plist_keys=14 strings=1102
+violations=2
+exit=1

@@ -1,0 +1,2 @@
+examined=93 too_young=0 unreadable=0 min_days=3 youngest=fs-err 3.3.2 (2026-10-04T10:37:50.746384Z) age_days=4
+exit=0

@@ -26,9 +26,8 @@ enum BuildInfo {
 EOF
 
 # shellcheck disable=SC2086
-(cd shell && swift build -c release --product SquareControl --scratch-path ".build/$configuration" $defines \
-  -Xswiftc -file-compilation-dir -Xswiftc . -Xswiftc -debug-prefix-map -Xswiftc "$(pwd)=.")
-binary="$(find "shell/.build/$configuration" -path '*Release/SquareControl' -type f -perm +111 | head -1)"
+(cd shell && swift build -c release --product SquareControl --scratch-path ".build-$configuration" $defines)
+binary="$(find -L "shell/.build-$configuration" -path '*Release/SquareControl' -type f -perm +111 | head -1)"
 [ -n "$binary" ] || { echo "SquareControl binary not found" >&2; exit 1; }
 
 app="build/$configuration/Square Control.app"

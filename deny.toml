@@ -1,0 +1,31 @@
+# Supply-chain policy (NFR-S8, ADR-0042 section 4): MIT, Apache-2.0, BSD, MPL-2.0 admitted.
+[graph]
+targets = ["aarch64-apple-darwin", "x86_64-unknown-linux-gnu"]
+all-features = false
+
+[licenses]
+allow = ["MIT", "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "BSD-2-Clause", "BSD-3-Clause", "MPL-2.0"]
+confidence-threshold = 0.93
+# Own crates are not published; their licence is decided at import into the domain repository.
+private = { ignore = true }
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# The only path dependency is the workspace's own core (publish = false).
+allow-wildcard-paths = true
+deny = [
+  { name = "reqwest" }, { name = "hyper" }, { name = "ureq" }, { name = "openssl-sys" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+
+# unicode-ident is a compile-time dependency of proc-macro2 (UniFFI's macros): it runs in the
+# compiler, never in the artefact. Unicode-3.0 is permissive but outside the ADR-0042 list:
+# kept as a named, owner-visible exception rather than widening the allow list.
+[[licenses.exceptions]]
+crate = "unicode-ident"
+allow = ["Unicode-3.0"]

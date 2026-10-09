@@ -1,0 +1,72 @@
+warning[license-not-encountered]: license was not encountered
+  ┌─ deny.toml:7:66
+  │
+7 │ allow = ["MIT", "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "BSD-2-Clause", "BSD-3-Clause", "MPL-2.0"]
+  │                                                                  ━━━━━━━━━━━━ unmatched license allowance
+
+warning[license-not-encountered]: license was not encountered
+  ┌─ deny.toml:7:82
+  │
+7 │ allow = ["MIT", "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "BSD-2-Clause", "BSD-3-Clause", "MPL-2.0"]
+  │                                                                                  ━━━━━━━━━━━━ unmatched license allowance
+
+warning[duplicate]: found 2 duplicate entries for crate 'syn'
+   ┌─ Cargo.lock:64:1
+   │  
+64 │ ╭ syn 2.0.119 registry+https://github.com/rust-lang/crates.io-index
+65 │ │ syn 3.0.6 registry+https://github.com/rust-lang/crates.io-index
+   │ ╰───────────────────────────────────────────────────────────────┘ lock entries
+   │  
+   ├ syn v2.0.119
+     ├── scroll_derive v0.12.1
+     │   └── scroll v0.12.0
+     │       └── goblin v0.8.2
+     │           └── uniffi_bindgen v0.32.1
+     │               └── uniffi v0.32.1
+     │                   ├── sc_ffi v0.0.0
+     │                   └── uniffi-bindgen v0.0.0
+     ├── uniffi_internal_macros v0.32.1
+     │   ├── uniffi_bindgen v0.32.1 (*)
+     │   ├── uniffi_meta v0.32.1
+     │   │   ├── uniffi_bindgen v0.32.1 (*)
+     │   │   ├── uniffi_macros v0.32.1
+     │   │   │   └── uniffi v0.32.1 (*)
+     │   │   └── uniffi_udl v0.32.1
+     │   │       └── uniffi_bindgen v0.32.1 (*)
+     │   └── uniffi_pipeline v0.32.1
+     │       ├── uniffi v0.32.1 (*)
+     │       ├── uniffi_bindgen v0.32.1 (*)
+     │       └── uniffi_meta v0.32.1 (*)
+     └── uniffi_macros v0.32.1 (*)
+   ├ syn v3.0.6
+     ├── askama_derive v0.16.1
+     │   └── askama_macros v0.16.1
+     │       └── askama v0.16.1
+     │           └── uniffi_bindgen v0.32.1
+     │               └── uniffi v0.32.1
+     │                   ├── sc_ffi v0.0.0
+     │                   └── uniffi-bindgen v0.0.0
+     ├── clap_derive v4.6.7
+     │   └── clap v4.6.7
+     │       └── uniffi v0.32.1 (*)
+     ├── serde_derive v1.0.229
+     │   ├── askama_derive v0.16.1 (*)
+     │   ├── askama_parser v0.16.1
+     │   │   └── askama_derive v0.16.1 (*)
+     │   └── serde v1.0.229
+     │       ├── askama_derive v0.16.1 (*)
+     │       ├── askama_parser v0.16.1 (*)
+     │       ├── basic-toml v0.1.10
+     │       │   └── askama_derive v0.16.1 (*)
+     │       ├── cargo_metadata v0.23.1
+     │       │   ├── uniffi v0.32.1 (*)
+     │       │   └── uniffi_bindgen v0.32.1 (*)
+     │       ├── uniffi_bindgen v0.32.1 (*)
+     │       └── uniffi_macros v0.32.1
+     │           └── uniffi v0.32.1 (*)
+     └── thiserror-impl v2.0.21
+         └── thiserror v2.0.21
+             └── cargo_metadata v0.23.1 (*)
+
+bans ok, licenses ok, sources ok
+exit=0

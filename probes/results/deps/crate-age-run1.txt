@@ -1,0 +1,9 @@
+TOO YOUNG: serde_spanned 1.1.2 published 2026-10-08T00:54:02.374642Z
+TOO YOUNG: toml 1.1.7+spec-1.1.0 published 2026-10-08T00:54:06.382971Z
+TOO YOUNG: toml_datetime 1.1.2+spec-1.1.0 published 2026-10-08T00:54:03.238939Z
+TOO YOUNG: toml_parser 1.1.4+spec-1.1.0 published 2026-10-08T00:54:04.036814Z
+TOO YOUNG: toml_writer 1.1.3+spec-1.1.0 published 2026-10-08T00:54:04.845560Z
+TOO YOUNG: zerocopy 0.8.62 published 2026-10-08T10:04:10.669172Z
+TOO YOUNG: zerocopy-derive 0.8.62 published 2026-10-08T10:03:02.942785Z
+examined=93 too_young=7 unreadable=0 min_days=3 youngest=zerocopy 0.8.62 (2026-10-08T10:04:10.669172Z) age_days=0
+exit=1

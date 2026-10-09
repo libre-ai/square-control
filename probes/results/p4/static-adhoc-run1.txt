@@ -1,0 +1,9 @@
+## build stamp=p4-build-a
+Identifier=org.libre-ai.square-control
+Signature=adhoc
+# designated => cdhash H"b5055b6d1a1cc47bf8707f8ffd27688360e6b452"
+## build stamp=p4-build-b
+Identifier=org.libre-ai.square-control
+Signature=adhoc
+# designated => cdhash H"b53ae25b3cbc5a4a1b27529962c1b2b70f42ebfc"
+CodeDirectory v=20500 size=1340 flags=0x10002(adhoc,runtime) hashes=35+3 location=embedded

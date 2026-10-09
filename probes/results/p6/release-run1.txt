@@ -1,0 +1,4 @@
+## release bundle
+examined: imported_symbols=350 libraries=27 linked=27 entitlements=0 plist_keys=12 strings=1102
+violations=0
+exit=0
