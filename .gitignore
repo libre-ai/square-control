@@ -1,0 +1,7 @@
+/target/
+/build/
+/shell/.build/
+/xcframework/
+/gen/
+/probes/build/
+.DS_Store

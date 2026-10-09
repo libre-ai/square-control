@@ -1,0 +1,207 @@
+P40 Square Control / E0 -- probe protocol (fixed BEFORE any measurement; committed first)
+=======================================================================================
+
+Source: analyses/omarchy-2026-10-07/20-square-control-spec-v2.md (E0 in section 9,
+annex B "not verified"), owner decisions Y25 (v1 = 45 REQUIRED lines), Y27 (macOS 26 + 27,
+arm64), Y28 (local private code, no remote, no push).
+
+Reference machine: Apple M4 Max, macOS 26.6.2 (25G83), one built-in display 3024x1964
+(1512x982 points), Xcode 27.0 (27A266a), Swift 6.4, rustc 1.97.0. macOS 27 is NOT available on
+this machine: every probe below is measured on 26.6.2 only; the 27 column stays open.
+
+Ground rules
+------------
+G1  No system security setting is changed by the agent. Any Accessibility / Input Monitoring
+    grant is performed by the owner in System Settings; the probe is then marked
+    "pending grant" until the owner has done it. No `tccutil`, no TCC.db access (read or
+    write), no profile installation.
+G2  Responsible process. TCC attributes a process launched from a terminal to the terminal
+    app. The agent's shell descends from Zed.app (zsh <- login <- zed), which is trusted for
+    Accessibility, Input Monitoring, event posting and screen capture (measured by a
+    preflight-only binary run from the shell, before this protocol). Consequence:
+      - a probe whose question is "which permission does binary X need" MUST run as an .app
+        bundle launched by LaunchServices (`open -n -W`), so that it is its own responsible
+        process; it records its own preflight state as a control;
+      - a probe whose question is AX mechanics (frames, timeouts) MAY run from the shell; its
+        result is then labelled "host identity (Zed)" and says nothing about permissions.
+G3  No probe calls a prompting API (AXIsProcessTrustedWithOptions with prompt,
+    CGRequestListenEventAccess, CGRequestPostEventAccess, CGRequestScreenCaptureAccess).
+    Event-tap creation itself may make the system show a prompt or add a disabled entry to
+    Input Monitoring; that is recorded, never answered by the agent.
+G4  Stimuli are synthetic events posted by an injector run from the shell
+    (CGEventPost at kCGHIDEventTap, host identity). Known bias: synthetic events, not
+    physical keys. Where the verdict could depend on it, the protocol says so.
+G5  Raw output of every run is kept under probes/results/<probe>/<run>.txt and quoted in the
+    report. A probe that cannot read its own output file is a failure, never a zero.
+G6  Owner's windows are not moved: AX probes only act on windows they open themselves
+    (helper app, a new TextEdit document, Calculator), and restore the initial frame.
+G7  Loop 1.4.2 keeps running (owner's tool). Hotkeys chosen for the probes avoid its trigger
+    (left Option + left Control): product hotkey candidate = Control+Shift+Command+Left.
+
+Identities
+----------
+Local self-signed code-signing certificate "Square Control Local Signing", RSA-2048,
+EKU codeSigning, stored in a dedicated keychain file outside the repository
+(../square-control-signing/sc-local.keychain-db), never added to the keychain search list,
+never marked trusted (no trust-settings change). Every bundle is signed with
+`codesign --options runtime` (hardened runtime), no entitlements except where stated, no
+timestamp. Bundle ids:
+  org.libre-ai.square-control                 product (E0 skeleton)
+  org.libre-ai.square-control.helper          helper app (AX target, key-event recorder)
+  org.libre-ai.square-control.probe.tap       probe 1
+  org.libre-ai.square-control.probe.hotkey    probe 2
+
+P1  Does a modifier-only event tap (flagsChanged) need Input Monitoring on top of Accessibility?
+------------------------------------------------------------------------------------------
+Binary: TapProbe.app. Launched with `open -n -W TapProbe.app --args <out> <seconds>`.
+In-app sequence:
+  1. record AXIsProcessTrusted(), CGPreflightListenEventAccess(), CGPreflightPostEventAccess();
+  2. create, in this order, at kCGSessionEventTap / headInsert:
+       tap A  listenOnly, mask = flagsChanged
+       tap B  defaultTap (active filter, passes events through unchanged), mask = flagsChanged
+       tap C  listenOnly, mask = keyDown | keyUp      (control: known to be gated)
+     record created yes/no for each;
+  3. enable the created taps, run the run loop for <seconds>, count events per tap and type,
+     and count kCGEventTapDisabledByTimeout / ByUserInput callbacks;
+  4. write one line per item to <out>.
+Stimulus (injector, from the shell, starting 2 s after launch): 10 x (left Option down,
+left Option up), 10 x (left Control down, left Control up) as flagsChanged events with the
+device-dependent side bits, then 10 x (F18 down, F18 up). Expected deliveries per created
+tap: A and B 40 flagsChanged; C 20 key events.
+States:
+  S0  no grant to the probe (measurable now);
+  S1  Accessibility granted to TapProbe.app only (owner);
+  S2  Input Monitoring granted to TapProbe.app only, Accessibility removed (owner, optional:
+      only if S1 says flagsChanged is gated).
+Verdict rule (fixed now):
+  - "Accessibility alone is enough" iff in S1 taps A and B are created and each receives
+    40/40 flagsChanged;
+  - "Input Monitoring required" iff in S1 tap A or B is not created or receives < 40 while
+    the same tap receives 40/40 in S2 (or under host identity);
+  - "no permission needed" iff already in S0 taps A and B receive 40/40 (then the tap is not
+    gated at all for flagsChanged, and the spec risk disappears);
+  - otherwise "inconclusive", with the raw counts.
+  Side measurement in every state: the side bits (NX_DEVICELALTKEYMASK 0x20,
+  NX_DEVICELCTLKEYMASK 0x01) are visible in the delivered flags, so FR-02 (left/right
+  distinguished) is decidable from tap A alone.
+
+P2  RegisterEventHotKey for direct shortcuts, without a permanent keyboard tap (S-B1)
+-------------------------------------------------------------------------------------
+Binary: HotkeyProbe.app (no grant ever needed; run in S0). Launched with `open -n -W`.
+Registers, with Carbon RegisterEventHotKey on the application event target, pressed AND
+released handlers:
+  H1  Control+Shift+Command+LeftArrow   (product candidate for "left half")
+  H2  Option+Shift+F19                  (E20: Option+Shift only, reported broken before 15.2)
+  H3  Option+F19                        (Option only)
+  H4  Control+Option+F19                (the owner's Loop modifiers, with a non-modifier key)
+Records OSStatus of each registration, AXIsProcessTrusted() and CGPreflightListenEventAccess()
+(control: both expected false), and counts pressed / released per hotkey.
+Stimulus: the helper app is made frontmost (it records every keyDown/keyUp it receives);
+injector posts 10 x each combination (key down, key up, with the modifier flags set on the
+key events and the modifier flagsChanged events around them); then 10 x H1 with the RIGHT
+Control device bit instead of left (side test).
+Verdict rule:
+  - S-B1 feasible iff H1 registers with noErr, 10/10 pressed and 10/10 released are
+    delivered with AX=false and Listen=false, and the helper receives 0 keyDown/keyUp for
+    the H1 key;
+  - E20 re-measured: H2 status and deliveries reported as-is;
+  - side test: if right-Control H1 also fires 10/10, RegisterEventHotKey does not
+    distinguish sides (expected), which confirms FR-02 needs the flagsChanged tap of P1.
+
+P3  AXUIElement mechanics: move/resize a third-party window, read back the OBTAINED frame
+(A-B4), AX executor off the main actor with a bounded deadline on an unresponsive app (A-B3)
+-----------------------------------------------------------------------------------------
+Binary: `axmech` (CLI, from the shell => host identity, see G2) and the same code inside the
+product app for the product-identity re-run (pending grant).
+Part A, move/resize. Targets: helper app (resizable window), TextEdit (new untitled document,
+opened by the probe), Calculator (fixed-size window). For each target, 10 repetitions:
+  1. find the window: kAXFocusedWindowAttribute of the app element, else first of
+     kAXWindowsAttribute;
+  2. read initial frame until stable (3 identical reads 1 ms apart, max 50 reads);
+  3. plan = left half of the visible frame of the main screen (top-left origin, points);
+  4. if the app has AXEnhancedUserInterface = true, set false, remember;
+  5. set size, set position, set size (FR-11 sequence), timing each call;
+  6. restore AXEnhancedUserInterface if it was true;
+  7. read obtained frame until stable; deltas obtained - planned on x, y, w, h;
+  8. restore the initial frame (same sequence), read back.
+  Output: per repetition, planned, obtained, deltas, AX error codes, per-call microseconds.
+  Verdict A-B4: "obtained frame readable and comparable" iff step 7 yields a stable frame in
+  10/10; the deltas are reported, not judged (judging them is AT-01, after E1). Calculator is
+  expected to keep its size: the probe reports it as a constrained window.
+Part B, frozen app. Helper app launched, its window found, then `kill -STOP <pid>`.
+  The executor (one serial DispatchQueue per pid, AXUIElementSetMessagingTimeout(app, 0.25),
+  continuation bridged into Swift concurrency, never on the main actor) is asked, 20 times:
+    - read the frozen helper window position, and concurrently
+    - move the TextEdit window (Part A plan) on its own queue.
+  A main-thread heartbeat (every 10 ms) records its maximum gap during the run.
+  Measured: elapsed time and AX error of each frozen read; elapsed time of each concurrent
+  TextEdit move; heartbeat maximum gap. Then `kill -CONT`, and one read must succeed.
+  Verdict A-B3 (thresholds from AT-29 / NFR-R1): pass iff 20/20 frozen reads return an error
+  in <= 250 + 50 ms, 20/20 TextEdit moves finish in <= 100 ms each (Cocoa app, AT-16 p99
+  native = 66 ms is the later gate; 100 ms here only proves non-blocking), heartbeat gap
+  <= 100 ms, and the read after SIGCONT succeeds.
+Product identity: same measurements by the product app after the owner grants it
+Accessibility -> pending grant until then.
+
+P4  Accessibility grant persistence across builds with the local certificate (S-B6)
+---------------------------------------------------------------------------------
+Static half (measurable now): build the product twice, the second time with a different
+build stamp compiled in. Record for both: `codesign -dv` (CDHash, flags=runtime, Identifier,
+Authority), `codesign -d -r-` (designated requirement). Pass iff CDHashes differ, both have
+flags containing "runtime", and the designated requirements are byte-identical and do not
+contain "cdhash".
+Dynamic half (pending grant):
+  1. install build N at /Applications/Square Control.app; launch with `open`; the app writes
+     ax_trusted to ~/Library/Application Support/org.libre-ai.square-control/e0-state.txt;
+     expected false;
+  2. owner grants Accessibility to /Applications/Square Control.app;
+  3. relaunch: expected ax_trusted=true;
+  4. build N+1 (different stamp, different CDHash), replace the bundle at the same path,
+     relaunch: pass iff ax_trusted=true with no owner action;
+  5. control: an ad hoc signed build (`codesign -s -`, DR = cdhash) at the same path:
+     expected ax_trusted=false (proves the probe can see a lost grant); then reinstall N+1.
+Verdict: pass iff step 4 is true and step 5 is false.
+
+P5  E2E automation (A-B7): can a test binary get Accessibility locally without interaction?
+---------------------------------------------------------------------------------------
+No modification of anything; inventory and measurement only.
+  M1  SIP status (`csrutil status`): TCC.db of the system is SIP-protected when enabled.
+  M2  `tccutil` capabilities: usage text (reset only, or grant?).
+  M3  responsibility inheritance: preflight of a CLI run from the shell (host identity) vs
+      the same preflight inside an .app launched by `open` (P1 S0 control). If the CLI is
+      trusted and the .app is not, a test binary run from a trusted host gets AX with no
+      interaction -- but with ALL the host's grants, so it cannot test permissions.
+  M4  one-time grant to a stably signed test runner: decided by P4 dynamic half.
+  M5  MDM PPPC: machine enrolment state (`profiles status -type enrollment`, read-only).
+Verdict: answer "without any interaction", "with one owner interaction, then unattended",
+"by host inheritance (unattended, permission-blind)", each yes/no with its measurement.
+
+P6  Closed list of admitted API symbols (AT-34) and no URL scheme (AT-27), on the binary
+----------------------------------------------------------------------------------------
+Script: scripts/check-binary.sh <app bundle>. On the RELEASE product bundle:
+  - `nm -u -m` of the main executable: every undefined symbol must be listed in
+    scripts/symbols.allowlist (closed list, reviewed; new symbol = failure); every symbol
+    must come from an admitted library (AppKit, ApplicationServices/HIServices, Carbon/HIToolbox,
+    CoreGraphics, CoreFoundation, Foundation, libSystem, libobjc, Swift runtime libs);
+    denied patterns (NFR-S4, NFR-S2, section 8.3): NSURLSession, nw_, socket, connect,
+    getaddrinfo, dlopen, dlsym, objc_getClass, NSClassFromString, _AXUIElementGetWindow,
+    SLS, CGS, CGEventPost, CGEventKeyboardGetUnicodeString, CGWindowListCreateImage;
+  - `otool -L`: no PrivateFrameworks, ScreenCaptureKit, CFNetwork, Network;
+  - `codesign -dv`: flags include runtime; `codesign -d --entitlements -`: none of
+    get-task-allow, disable-library-validation, allow-dyld-environment-variables;
+  - Info.plist: no CFBundleURLTypes; `strings` of the executable: no "sc-e2e", no URL
+    scheme string, no macOS user-home path prefix;
+  - prints the counts examined (symbols, libraries, entitlements, strings); an unreadable
+    input is a failure.
+Pass iff 0 violation with non-zero counts. The E2E configuration build is checked with the
+same script and MUST fail on the "sc-e2e" string (proves the check sees the E2E channel).
+
+E0 skeleton acceptance (from section 9)
+---------------------------------------
+  - Rust core `crates/layout` built test-first; golden vectors executed in Rust (cargo test)
+    AND in Swift through the real UniFFI bridge (swift test); each run prints its vector count
+    and fails on 0;
+  - one action (left half) traverses hotkey -> orchestrator (off main actor) -> core
+    (requirements, resolve) -> AX executor -> read back -> commit(observed);
+  - product bundle signed with the local identity + hardened runtime; AT-27 green (P6 script);
+    AT-20 pending grant (P4 dynamic half).
