@@ -1,0 +1,13 @@
+probe=P1 pid=81825 bundle=org.libre-ai.square-control.probe.tap
+preflight ax_trusted=true listen_event=true post_event=true
+tap A_listenOnly_flagsChanged created=true
+tap A_listenOnly_flagsChanged enabled=true
+tap B_defaultTap_flagsChanged created=true
+tap B_defaultTap_flagsChanged enabled=true
+tap C_listenOnly_keyDownUp created=true
+tap C_listenOnly_keyDownUp enabled=true
+listening seconds=12.0
+count A_listenOnly_flagsChanged flagsChanged=40 keyDown=0 keyUp=0 left_option_bit=10 left_control_bit=10 disabled_timeout=0 disabled_user_input=0
+count B_defaultTap_flagsChanged flagsChanged=40 keyDown=0 keyUp=0 left_option_bit=10 left_control_bit=10 disabled_timeout=0 disabled_user_input=0
+count C_listenOnly_keyDownUp flagsChanged=0 keyDown=10 keyUp=10 left_option_bit=0 left_control_bit=0 disabled_timeout=0 disabled_user_input=0
+preflight_after ax_trusted=true listen_event=true

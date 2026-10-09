@@ -25,6 +25,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-warnings-as-errors"])],
             linkerSettings: [.linkedFramework("AppKit")]
         ),
+        // P3 probe, never shipped in the app bundle.
+        .executableTarget(
+            name: "sc-axmech",
+            dependencies: ["SquareControlKit", "SCCore"],
+            swiftSettings: [.unsafeFlags(["-warnings-as-errors"])]
+        ),
         .testTarget(
             name: "SquareControlKitTests",
             dependencies: ["SquareControlKit", "SCCore"]

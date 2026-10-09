@@ -1,0 +1,9 @@
+hotkey listener (computer-use key press ctrl+alt+cmd+j, TextEdit front, 09:12):
+install=0 register=0
+hotkey!
+calls=1
+same listener, System Events keystroke + 3 CGEventPost variants:
+install=0 register=0
+calls=0
+install=0 register=0
+calls=0

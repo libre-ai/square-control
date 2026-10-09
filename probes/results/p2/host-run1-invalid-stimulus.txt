@@ -1,0 +1,11 @@
+probe=P2 pid=84899 bundle=org.libre-ai.square-control.probe.hotkey
+preflight ax_trusted=true listen_event=true
+install_event_handler status=0
+register H1_ctrl_shift_cmd_left status=0
+register H2_opt_shift_f19 status=0
+register H3_opt_f19 status=0
+register H4_ctrl_opt_f19 status=0
+count H1_ctrl_shift_cmd_left pressed=0 released=0
+count H2_opt_shift_f19 pressed=0 released=0
+count H3_opt_f19 pressed=0 released=0
+count H4_ctrl_opt_f19 pressed=0 released=0

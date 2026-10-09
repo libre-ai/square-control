@@ -61,7 +61,7 @@ func readFrame(_ window: AXUIElement) throws(WindowSystemError) -> FfiRect {
     let size = try copyAttribute(window, kAXSizeAttribute)
     var point = CGPoint.zero
     var extent = CGSize.zero
-    // swiftlint:disable:next force_cast -- AX guarantees AXValue for these two attributes
+    // The casts below are guarded by the type-id checks on the same line.
     guard CFGetTypeID(position) == AXValueGetTypeID(), CFGetTypeID(size) == AXValueGetTypeID(),
           AXValueGetValue(position as! AXValue, .cgPoint, &point),
           AXValueGetValue(size as! AXValue, .cgSize, &extent)
@@ -147,13 +147,18 @@ public final class AXWindowSystem: WindowSystem {
         guard AXIsProcessTrusted() else { throw .notTrusted }
         let pid = await MainActor.run { NSWorkspace.shared.frontmostApplication?.processIdentifier }
         guard let pid else { throw .noFrontmostApplication }
+        return try await window(ofProcess: pid)
+    }
+
+    /// Focused window of a process, else its first window.
+    public func window(ofProcess pid: Int32) async throws(WindowSystemError) -> TargetWindow {
         let elements = try await executor.run(pid: pid) { () throws(WindowSystemError) -> (UncheckedElement, UncheckedElement) in
             let application = AXUIElementCreateApplication(pid)
             AXUIElementSetMessagingTimeout(application, AXExecutor.messagingTimeoutSeconds)
             let window: AXUIElement
             if let focused = try? copyAttribute(application, kAXFocusedWindowAttribute),
                CFGetTypeID(focused) == AXUIElementGetTypeID() {
-                window = focused as! AXUIElement // swiftlint:disable:this force_cast -- type id checked above
+                window = focused as! AXUIElement // type id checked above
             } else if let windows = try? copyAttribute(application, kAXWindowsAttribute) as? [AXUIElement],
                       let first = windows.first {
                 window = first
@@ -161,6 +166,12 @@ public final class AXWindowSystem: WindowSystem {
                 throw .noWindow
             }
             AXUIElementSetMessagingTimeout(window, AXExecutor.messagingTimeoutSeconds)
+            // Measured 2026-10-09 (E0 probe P3): while the session is locked, AXFocusedWindow
+            // and AXWindows return the application element itself, whose position and size are
+            // unsupported. Only a real window is a target.
+            guard (try? copyAttribute(window, kAXRoleAttribute)) as? String == kAXWindowRole as String else {
+                throw .noWindow
+            }
             return (UncheckedElement(raw: application), UncheckedElement(raw: window))
         }
         let handle = table.withLock { table -> UInt64 in
@@ -182,6 +193,16 @@ public final class AXWindowSystem: WindowSystem {
         let element = entry.window
         return try await executor.run(pid: entry.pid) { () throws(WindowSystemError) -> FfiRect in
             try readFrame(element.raw)
+        }
+    }
+
+    /// Diagnostic for the probes: the application's AXEnhancedUserInterface value, if any.
+    public func enhancedUserInterface(of window: TargetWindow) async throws(WindowSystemError) -> Bool? {
+        let entry = try entry(for: window)
+        let application = entry.application
+        let element = entry.window
+        return try await executor.run(pid: entry.pid) { () throws(WindowSystemError) -> Bool? in
+            LiveFrameOperations(application: application.raw, window: element.raw).enhancedUserInterface()
         }
     }
 

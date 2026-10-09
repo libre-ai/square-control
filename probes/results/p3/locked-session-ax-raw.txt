@@ -1,0 +1,15 @@
+# 2026-10-09 09:17 CEST, session locked (CGSSessionScreenIsLocked=Yes since 1791530093), host identity
+## ./axdbg3 <TextEdit pid>; ./axdbg3 <Calculator pid>
+count=1 roles=["0:AXApplication"] app_role=0:AXApplication equal_app=true
+focused role=0:AXApplication pid=19548 equal_app=true
+main status=0
+count=1 roles=["0:AXApplication"] app_role=0:AXApplication equal_app=true
+focused role=0:AXApplication pid=29383 equal_app=true
+main status=0
+## ./axdbg2 <TextEdit pid>
+names_status=0 names=["AXFunctionRowTopLevelElements", "AXFrame", "AXChildren", "AXFocusedUIElement", "AXFrontmost", "AXRole", "AXExtrasMenuBar", "AXMainWindow", "AXFocusedWindow", "AXTitle", "AXChildrenInNavigationOrder", "AXEnhancedUserInterface", "AXPreferredLanguage", "AXRoleDescription", "AXHidden", "AXMenuBar", "AXWindows", "AXSize", "AXPosition"]
+AXRole=0
+AXSubrole=-25205
+AXSize=-25205
+AXPosition=-25205
+AXFrame=-25205
