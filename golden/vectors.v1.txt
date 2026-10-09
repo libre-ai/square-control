@@ -1,0 +1,19 @@
+# Square Control golden vectors v1 -- executed by the Rust core (cargo test) and by Swift
+# through the real UniFFI bridge (swift test). Expected values are computed by hand, not
+# produced by the code under test.
+# One vector per line, fields separated by single spaces:
+#   id action wx wy ww wh n [fx fy fw fh vx vy vw vh]*n expect
+#   expect = ok px py pw ph screen_index | err NoScreen | err InvalidGeometry
+# Coordinates: global points, top-left origin (AX space).
+g01 left_half 300 200 800 600 1 0 0 1512 982 0 33 1512 949 ok 0 33 756 949 0
+g02 left_half 10 40 100 100 1 0 0 1513 982 0 25 1513 957 ok 0 25 756 957 0
+g03 left_half 1400 100 800 500 2 0 0 1512 982 0 33 1512 949 1512 -200 1920 1080 1512 -175 1920 1055 ok 1512 -175 960 1055 1
+g04 left_half -5000 -5000 300 300 1 0 0 1512 982 0 33 1512 949 ok 0 33 756 949 0
+g05 left_half 0 0 10 10 0 err NoScreen
+g06 left_half 0 0 10 10 1 0 0 10 10 0 0 -1 10 err InvalidGeometry
+g07 left_half 0 0 50 50 1 0 0 1512.5 982 0 24.5 1511.5 957.5 ok 0 24.5 755 957.5 0
+g08 left_half 900 100 200 100 2 0 0 1000 800 0 30 1000 770 1000 0 1000 800 1000 30 1000 770 ok 0 30 500 770 0
+g09 left_half 0 33 756 949 1 0 0 1512 982 0 33 1512 949 ok 0 33 756 949 0
+g10 left_half -1000 200 400 300 2 0 0 1512 982 0 33 1512 949 -1920 0 1920 1080 -1920 25 1920 1055 ok -1920 25 960 1055 1
+g11 left_half 0 0 inf 10 1 0 0 1512 982 0 33 1512 949 err InvalidGeometry
+g12 left_half 100 100 0 0 1 0 0 1512 982 0 33 1512 949 ok 0 33 756 949 0

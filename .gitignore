@@ -5,3 +5,5 @@
 /gen/
 /probes/build/
 .DS_Store
+/shell/Sources/SCCore/sc_ffi.swift
+/shell/Sources/SquareControl/BuildInfo.swift

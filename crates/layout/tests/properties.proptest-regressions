@@ -1,0 +1,9 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc f2629144699e752ac24876e417b1d195cb4cf19622b233e2729db2e4e89bb2b7 # shrinks to window = Rect { x: 0.0, y: 0.0, width: 1.0, height: 1.0 }, screens = [Screen { frame: Rect { x: -3000.0, y: 0.0, width: 200.0, height: 200.0 }, visible: Rect { x: -3000.0, y: 0.0, width: 200.0, height: 200.0 } }]
+cc 6a707fc2a49a31fae25b831087f8f1092e3a4ddcef3fbdad74212740fc2044bc # shrinks to window = Rect { x: 0.0, y: 0.0, width: 1.0, height: 1.0 }, screens = [Screen { frame: Rect { x: -3000.0, y: 0.0, width: 200.0, height: 200.0 }, visible: Rect { x: -3000.0, y: 0.0, width: 200.0, height: 200.0 } }]
+cc d89795040825e92f47eee964e40ee791acc23e546641ecf98362251b7491533b # shrinks to window_id = 0, before = Rect { x: 0.0, y: 0.0, width: 1.0, height: 1.0 }, after = Rect { x: 0.0, y: 0.0, width: 1.0, height: 1990.9413172297566 }

@@ -1,0 +1,21 @@
+[package]
+name = "sc_ffi"
+version = "0.0.0"
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# The only crate that knows UniFFI (spec v2 section 7.3): a switch to a C ABI stays local.
+[lib]
+crate-type = ["staticlib", "lib"]
+
+[dependencies]
+layout = { path = "../layout" }
+uniffi = { version = "=0.32.1", default-features = false }
+
+# No workspace lints: the UniFFI scaffolding expands to `unsafe extern "C"` items, which
+# `forbid(unsafe_code)` would reject; this crate holds no hand-written unsafe.
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"

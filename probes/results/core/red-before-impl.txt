@@ -1,0 +1,241 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (target/debug/deps/layout-540561904adbfbf5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/golden.rs (target/debug/deps/golden-6221f880d5e50ba2)
+
+running 1 test
+test golden_vectors_hold_bit_for_bit ... FAILED
+
+failures:
+
+---- golden_vectors_hold_bit_for_bit stdout ----
+golden vectors executed: 12, failed: 11
+
+thread 'golden_vectors_hold_bit_for_bit' (13365778) panicked at crates/layout/tests/golden.rs:107:5:
+[
+    "g01: expected Ok(Rect { x: 0.0, y: 33.0, width: 756.0, height: 949.0 }, 0), got Err(NoScreen)",
+    "g02: expected Ok(Rect { x: 0.0, y: 25.0, width: 756.0, height: 957.0 }, 0), got Err(NoScreen)",
+    "g03: expected Ok(Rect { x: 1512.0, y: -175.0, width: 960.0, height: 1055.0 }, 1), got Err(NoScreen)",
+    "g04: expected Ok(Rect { x: 0.0, y: 33.0, width: 756.0, height: 949.0 }, 0), got Err(NoScreen)",
+    "g06: expected Err(InvalidGeometry), got Err(NoScreen)",
+    "g07: expected Ok(Rect { x: 0.0, y: 24.5, width: 755.0, height: 957.5 }, 0), got Err(NoScreen)",
+    "g08: expected Ok(Rect { x: 0.0, y: 30.0, width: 500.0, height: 770.0 }, 0), got Err(NoScreen)",
+    "g09: expected Ok(Rect { x: 0.0, y: 33.0, width: 756.0, height: 949.0 }, 0), got Err(NoScreen)",
+    "g10: expected Ok(Rect { x: -1920.0, y: 25.0, width: 960.0, height: 1055.0 }, 1), got Err(NoScreen)",
+    "g11: expected Err(InvalidGeometry), got Err(NoScreen)",
+    "g12: expected Ok(Rect { x: 0.0, y: 33.0, width: 756.0, height: 949.0 }, 0), got Err(NoScreen)",
+]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    golden_vectors_hold_bit_for_bit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p layout --test golden`
+     Running tests/left_half.rs (target/debug/deps/left_half-5aea793a158c7c9f)
+
+running 10 tests
+test an_odd_visible_width_is_floored_so_the_plan_never_leaves_the_visible_frame ... FAILED
+test commit_records_the_observed_frames_and_undo_returns_the_observed_before ... FAILED
+test a_window_outside_every_screen_goes_to_the_first_screen ... FAILED
+test commit_without_a_change_records_nothing ... ok
+test history_is_bounded_per_window ... FAILED
+test the_target_screen_is_the_one_with_the_largest_intersection ... FAILED
+test non_finite_or_negative_geometry_is_rejected ... FAILED
+test no_screen_is_an_error_not_a_guess ... ok
+test left_half_takes_the_left_half_of_the_visible_frame ... FAILED
+test left_half_needs_the_focused_window_frame_and_the_screens ... FAILED
+
+failures:
+
+---- an_odd_visible_width_is_floored_so_the_plan_never_leaves_the_visible_frame stdout ----
+
+thread 'an_odd_visible_width_is_floored_so_the_plan_never_leaves_the_visible_frame' (13365782) panicked at crates/layout/tests/left_half.rs:60:5:
+assertion `left == right` failed
+  left: Err(NoScreen)
+ right: Ok(Rect { x: 0.0, y: 25.0, width: 756.0, height: 957.0 })
+
+---- commit_records_the_observed_frames_and_undo_returns_the_observed_before stdout ----
+
+thread 'commit_records_the_observed_frames_and_undo_returns_the_observed_before' (13365783) panicked at crates/layout/tests/left_half.rs:143:5:
+assertion `left == right` failed
+  left: None
+ right: Some(Rect { x: 300.0, y: 200.0, width: 800.0, height: 600.0 })
+
+---- a_window_outside_every_screen_goes_to_the_first_screen stdout ----
+
+thread 'a_window_outside_every_screen_goes_to_the_first_screen' (13365781) panicked at crates/layout/tests/left_half.rs:88:5:
+assertion `left == right` failed
+  left: Err(NoScreen)
+ right: Ok(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- history_is_bounded_per_window stdout ----
+
+thread 'history_is_bounded_per_window' (13365785) panicked at crates/layout/tests/left_half.rs:178:5:
+assertion `left == right` failed
+  left: 0
+ right: 20
+
+---- the_target_screen_is_the_one_with_the_largest_intersection stdout ----
+
+thread 'the_target_screen_is_the_one_with_the_largest_intersection' (13365790) panicked at crates/layout/tests/left_half.rs:76:5:
+assertion `left == right` failed
+  left: Err(NoScreen)
+ right: Ok((Rect { x: 1512.0, y: -175.0, width: 960.0, height: 1055.0 }, 1))
+
+---- non_finite_or_negative_geometry_is_rejected stdout ----
+
+thread 'non_finite_or_negative_geometry_is_rejected' (13365789) panicked at crates/layout/tests/left_half.rs:112:5:
+assertion `left == right` failed
+  left: Err(NoScreen)
+ right: Err(InvalidGeometry)
+
+---- left_half_takes_the_left_half_of_the_visible_frame stdout ----
+
+thread 'left_half_takes_the_left_half_of_the_visible_frame' (13365787) panicked at crates/layout/tests/left_half.rs:43:5:
+assertion `left == right` failed
+  left: Err(NoScreen)
+ right: Ok((Rect { x: 0.0, y: 33.0, width: 756.0, height: 949.0 }, 0))
+
+---- left_half_needs_the_focused_window_frame_and_the_screens stdout ----
+
+thread 'left_half_needs_the_focused_window_frame_and_the_screens' (13365786) panicked at crates/layout/tests/left_half.rs:27:5:
+assertion `left == right` failed
+  left: Needs { focused_window_frame: false, screens: false }
+ right: Needs { focused_window_frame: true, screens: true }
+
+
+failures:
+    a_window_outside_every_screen_goes_to_the_first_screen
+    an_odd_visible_width_is_floored_so_the_plan_never_leaves_the_visible_frame
+    commit_records_the_observed_frames_and_undo_returns_the_observed_before
+    history_is_bounded_per_window
+    left_half_needs_the_focused_window_frame_and_the_screens
+    left_half_takes_the_left_half_of_the_visible_frame
+    non_finite_or_negative_geometry_is_rejected
+    the_target_screen_is_the_one_with_the_largest_intersection
+
+test result: FAILED. 2 passed; 8 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p layout --test left_half`
+     Running tests/properties.rs (target/debug/deps/properties-53e2f1723106b28a)
+
+running 3 tests
+test the_plan_is_inside_the_visible_frame_of_its_screen ... FAILED
+test resolve_is_idempotent ... FAILED
+test undo_after_commit_returns_the_observed_before ... FAILED
+
+failures:
+
+---- the_plan_is_inside_the_visible_frame_of_its_screen stdout ----
+proptest: FileFailurePersistence::SourceParallel set, but failed to find lib.rs or main.rs
+
+thread 'the_plan_is_inside_the_visible_frame_of_its_screen' (13365795) panicked at crates/layout/tests/properties.rs:63:1:
+Test failed: assertion failed: plan.is_ok() at crates/layout/tests/properties.rs:71.
+minimal failing input: window = Rect {
+    x: 0.0,
+    y: 0.0,
+    width: 1.0,
+    height: 1.0,
+}, screens = [
+    Screen {
+        frame: Rect {
+            x: -3000.0,
+            y: 0.0,
+            width: 200.0,
+            height: 200.0,
+        },
+        visible: Rect {
+            x: -3000.0,
+            y: 0.0,
+            width: 200.0,
+            height: 200.0,
+        },
+    },
+]
+	successes: 0
+	local rejects: 0
+	global rejects: 0
+
+
+---- resolve_is_idempotent stdout ----
+proptest: FileFailurePersistence::SourceParallel set, but failed to find lib.rs or main.rs
+
+thread 'resolve_is_idempotent' (13365794) panicked at crates/layout/tests/properties.rs:63:1:
+Test failed: assertion failed: first.is_ok() at crates/layout/tests/properties.rs:84.
+minimal failing input: window = Rect {
+    x: 0.0,
+    y: 0.0,
+    width: 1.0,
+    height: 1.0,
+}, screens = [
+    Screen {
+        frame: Rect {
+            x: -3000.0,
+            y: 0.0,
+            width: 200.0,
+            height: 200.0,
+        },
+        visible: Rect {
+            x: -3000.0,
+            y: 0.0,
+            width: 200.0,
+            height: 200.0,
+        },
+    },
+]
+	successes: 0
+	local rejects: 0
+	global rejects: 0
+
+
+---- undo_after_commit_returns_the_observed_before stdout ----
+proptest: FileFailurePersistence::SourceParallel set, but failed to find lib.rs or main.rs
+
+thread 'undo_after_commit_returns_the_observed_before' (13365796) panicked at crates/layout/tests/properties.rs:63:1:
+Test failed: assertion failed: `(left == right)` 
+  left: `None`,
+ right: `Some(Rect { x: 0.0, y: 0.0, width: 1.0, height: 1.0 })` at crates/layout/tests/properties.rs:100.
+minimal failing input: window_id = 0, before = Rect {
+    x: 0.0,
+    y: 0.0,
+    width: 1.0,
+    height: 1.0,
+}, after = Rect {
+    x: 0.0,
+    y: 0.0,
+    width: 1.0,
+    height: 1990.9413172297566,
+}
+	successes: 0
+	local rejects: 0
+	global rejects: 0
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    resolve_is_idempotent
+    the_plan_is_inside_the_visible_frame_of_its_screen
+    undo_after_commit_returns_the_observed_before
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p layout --test properties`
+   Doc-tests layout
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: 3 targets failed:
+    `-p layout --test golden`
+    `-p layout --test left_half`
+    `-p layout --test properties`
