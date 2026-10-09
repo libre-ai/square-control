@@ -205,3 +205,19 @@ E0 skeleton acceptance (from section 9)
     (requirements, resolve) -> AX executor -> read back -> commit(observed);
   - product bundle signed with the local identity + hardened runtime; AT-27 green (P6 script);
     AT-20 pending grant (P4 dynamic half).
+
+Amendment A1 (2026-10-09, before any valid P2 measurement)
+-----------------------------------------------------------
+Observed: the first P2 runs gave 0 pressed for H1-H4 in S0 AND under host identity, and a
+minimal Carbon listener run from the shell also saw 0 with three posting variants (HID tap,
+session tap, annotated tap, flags on the key events only) and with System Events `key code`;
+the same listener saw 1/1 for a key press sent by the computer-use tool. The stimulus was
+invalid, not the result. Changes:
+  - injector mode `hotkeys2`: each modifier is posted as a key-down / key-up event of its own
+    virtual key code (not an event whose type is rewritten to flagsChanged), flags set as before;
+  - the injector refuses to post unless the helper app is frontmost (checked before the run
+    and before every chord); the helper is brought to the front by an Apple Event `activate`;
+  - P2 validity control added: a run under host identity must show 10/10 for H1 before the
+    S0 run counts; if the control stays at 0, P2 is "stimulus not reproducible by synthesis"
+    and the verdict waits for the owner's physical key presses (owner step).
+P1 keeps its original stimulus (validated 40/40 under host identity).
