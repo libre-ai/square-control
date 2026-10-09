@@ -1,0 +1,6 @@
+## NFR-Q4 partial: normal deps of layout
+layout v0.0.0 (crates/layout)
+## macOS terms in crates/layout/src (expected none)
+       0
+## golden count printed by the Rust gate
+golden vectors executed: 12, failed: 0
