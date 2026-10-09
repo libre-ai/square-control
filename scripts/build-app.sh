@@ -9,8 +9,11 @@ cd "$(git rev-parse --show-toplevel)"
 configuration="${1:?release|e2e}"
 stamp="${2:-$(date -u +%Y%m%dT%H%M%SZ)}"
 case "$configuration" in
-  release) defines="" ;;
-  e2e) defines="-Xswiftc -DSC_E2E" ;;
+  release) defines=""; identifier="org.libre-ai.square-control"; display="Square Control" ;;
+  # The E2E build has its own bundle id: with a stable designated requirement
+  # (identifier + certificate), sharing the product's id would hand the product's
+  # Accessibility grant to a binary that carries the E2E channel.
+  e2e) defines="-Xswiftc -DSC_E2E"; identifier="org.libre-ai.square-control.e2e"; display="Square Control E2E" ;;
   *) echo "unknown configuration $configuration" >&2; exit 2 ;;
 esac
 
@@ -30,7 +33,7 @@ EOF
 binary="$(find -L "shell/.build-$configuration" -path '*Release/SquareControl' -type f -perm +111 | head -1)"
 [ -n "$binary" ] || { echo "SquareControl binary not found" >&2; exit 1; }
 
-app="build/$configuration/Square Control.app"
+app="build/$configuration/$display.app"
 rm -rf "$app"
 mkdir -p "$app/Contents/MacOS"
 cp "$binary" "$app/Contents/MacOS/SquareControl"
@@ -39,9 +42,9 @@ cat > "$app/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleIdentifier</key><string>org.libre-ai.square-control</string>
-  <key>CFBundleName</key><string>Square Control</string>
-  <key>CFBundleDisplayName</key><string>Square Control</string>
+  <key>CFBundleIdentifier</key><string>$identifier</string>
+  <key>CFBundleName</key><string>$display</string>
+  <key>CFBundleDisplayName</key><string>$display</string>
   <key>CFBundleExecutable</key><string>SquareControl</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>0.0.0</string>
@@ -53,5 +56,5 @@ cat > "$app/Contents/Info.plist" <<EOF
   <key>LSArchitecturePriority</key><array><string>arm64</string></array>
 </dict></plist>
 EOF
-scripts/sign.sh "$app" org.libre-ai.square-control
+scripts/sign.sh "$app" "$identifier"
 echo "built $app stamp=$stamp commit=$commit"

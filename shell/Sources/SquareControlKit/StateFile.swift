@@ -11,7 +11,9 @@ public struct StateFile: Sendable {
 
     public static func standard() -> StateFile {
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        return StateFile(directory: base.appendingPathComponent("org.libre-ai.square-control", isDirectory: true))
+        // Per bundle id, so the E2E build (its own bundle id) never writes into the product's state.
+        let identifier = Bundle.main.bundleIdentifier ?? "org.libre-ai.square-control"
+        return StateFile(directory: base.appendingPathComponent(identifier, isDirectory: true))
     }
 
     public enum Failure: Error, Equatable { case notADirectory, open(Int32), write(Int32) }
