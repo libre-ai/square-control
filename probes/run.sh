@@ -100,6 +100,31 @@ e2e-host)
   { echo "# E2E left half $stamp host identity"; tail -n +"$((before + 1))" "$state"; } | clean > "probes/results/e2e/host-$stamp.txt"
   cat "probes/results/e2e/host-$stamp.txt"
   ;;
+e2e-app)
+  # Same as e2e-host, but launched by LaunchServices: the E2E bundle's own identity
+  # (needs the owner's Accessibility grant to "Square Control E2E.app").
+  mkdir -p probes/results/e2e
+  state="$HOME/Library/Application Support/org.libre-ai.square-control.e2e/e0-state.txt"
+  before=$(wc -l < "$state" 2>/dev/null || echo 0)
+  start_helper 30
+  open -W "build/e2e/Square Control E2E.app" --args --sc-e2e-left-half
+  { echo "# E2E left half $stamp own identity (LaunchServices)"; tail -n +"$((before + 1))" "$state"; } | clean > "probes/results/e2e/app-$stamp.txt"
+  cat "probes/results/e2e/app-$stamp.txt"
+  ;;
+p2-manual)
+  # Physical key presses by the owner (fallback if the synthetic control stays at 0):
+  # with the helper in front, press Control+Shift+Command+Left 10 times, then
+  # Option+Shift+F19 10 times, within 60 seconds.
+  mkdir -p probes/results/p2
+  start_helper 70
+  open -n "$build/HotkeyProbe.app" --args "$scratch/p2-manual.txt" 60
+  osascript -e 'tell application id "org.libre-ai.square-control.helper" to activate'
+  echo "press now: 10 x Control+Shift+Command+Left, 10 x Option+Shift+F19 (60 s)"
+  until [ -s "$scratch/p2-manual.txt" ]; do sleep 1; done
+  until grep -q 'final=true' "$scratch/helper.txt" 2>/dev/null; do sleep 1; done
+  { echo "# P2 manual $stamp"; cat "$scratch/p2-manual.txt" "$scratch/helper.txt"; } | clean > "probes/results/p2/manual-$stamp.txt"
+  cat "probes/results/p2/manual-$stamp.txt"
+  ;;
 p4)
   label="${2:?step label}"
   mkdir -p probes/results/p4
