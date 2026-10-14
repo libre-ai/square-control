@@ -12,7 +12,7 @@ SPDX-License-Identifier = "EUPL-1.2"
 # Editorial documentation and first-party project records (LICENSING.md, "Documentation").
 # The probe protocol and the raw probe results are records of measurements, not executable specification.
 [[annotations]]
-path = ["README.md", "PROTOCOL.txt", "CONTRIBUTING.md", "probes/results/**"]
+path = ["README.md", "PROTOCOL.txt", "CONTRIBUTING.md", "SECURITY.md", "probes/results/**"]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 Libre AI contributors"
 SPDX-License-Identifier = "CC-BY-4.0"
