@@ -6,7 +6,7 @@ Square Control is a couche 1 product (P40, workstation domain): a local, single-
 window layout tool for macOS. A pure Rust layout core decides frames; a Swift shell
 owns the hotkeys and the Accessibility calls. `project.v1.yaml` owns current state;
 `PROTOCOL.txt` owns the measurement protocol of the probes. Fleet doctrine comes from:
-https://raw.githubusercontent.com/libre-ai/project-governance/migrate/recover-code/docs/method/CONTEXT-TEMPLATE.md
+https://raw.githubusercontent.com/libre-ai/project-governance/HEAD/docs/method/CONTEXT-TEMPLATE.md
 
 ## Domain doctrine
 

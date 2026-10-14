@@ -1,6 +1,6 @@
 # Contributing
 
-Square Control follows the [Libre AI contribution policy](https://github.com/libre-ai/project-governance/blob/migrate/recover-code/CONTRIBUTING.md).
+Square Control follows the [Libre AI contribution policy](https://github.com/libre-ai/project-governance/blob/HEAD/CONTRIBUTING.md).
 Every commit must satisfy the Developer Certificate of Origin with an author-matching
 `Signed-off-by` trailer. No Contributor License Agreement grants proprietary relicensing.
 
@@ -18,4 +18,4 @@ screenshots or personal data. Probe results are committed as produced, after the
 that governs them.
 
 Suspected vulnerabilities, exposed secrets and exploit details must never enter a public
-issue or pull request. Use the [private fleet security intake](https://github.com/libre-ai/project-governance/security/advisories/new).
+issue or pull request. Report them privately as [SECURITY.md](SECURITY.md) describes.
