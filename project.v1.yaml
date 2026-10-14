@@ -1,0 +1,135 @@
+schema_version: libre-ai.project.v1
+project: square-control
+repository: libre-ai/square-control
+kind: product
+layer: couche-1
+statement:
+  for: people who arrange application windows on a Mac all day
+  who_faces: layouts rebuilt by hand with the mouse, and window managers that either ask for broad permissions or send data off the machine
+  enables: placing the focused window on a screen region by a keyboard shortcut, and trusting what the tool is allowed to do
+  producing:
+  - a background macOS application (no Dock icon) that moves and resizes the focused window
+  - a pure Rust layout core with golden vectors shared by Rust and Swift
+  - an installed binary whose imports, entitlements and strings are checked against a closed list
+  without_depending_on:
+  - any network service, telemetry or model
+  - broad input-monitoring permission, when Accessibility alone is enough
+summary: Local macOS window layout tool, Rust core and Swift shell, no network.
+current_situation: The E0 skeleton is in the repository. The layout core does the left half of the
+  visible frame with an undo history; its 15 tests and the 12 golden vectors pass in Rust and Swift on
+  one machine (macOS 26.6.2, arm64). The binary gate and the frozen-application probe pass. The
+  permission probes (Accessibility versus input monitoring, hotkey delivery, signing persistence)
+  are still pending a grant or an idle session. The other layouts of the required matrix are not written.
+  No CI job runs the Swift shell, the binary gate or the probes (they need macOS and a window server);
+  the Linux CI covers the Rust workspace and the dependency policy. Not distributed, not signed for third
+  parties.
+scope:
+- Keyboard-driven placement of the focused window on screen regions, with undo
+- Layout decisions in a dependency-free Rust core, applied through Accessibility by a Swift shell
+- A closed symbol list, no URL scheme and no machine path in the release binary
+- macOS 26 and 27, arm64
+non_goals:
+- A network service, an account, telemetry or any model
+- Automatic tiling
+- Distribution through the Mac App Store
+- Windows and Linux shells before the macOS product is usable
+dependencies:
+- 'on': libre-ai/project-governance
+  why: Fleet doctrine and reusable workflow templates.
+  pinned: github:libre-ai/project-governance#0db2e10e3ea785c31c101914483ed501ec4cbb7a
+- 'on': uniffi
+  why: Rust to Swift bridge, confined to crates/ffi.
+  pinned: 0.32.1
+maturity: specified
+confidence: medium
+exposure: idea
+freshness:
+  last_verified_on: '2026-10-14'
+scope_stability: stable
+hypothesis: A keyboard-driven window layout tool with a small, checkable permission surface and no network is enough
+  for daily use, so nobody needs to run a closed or broadly permissioned window manager.
+evidence_required:
+- the required layout matrix passes its acceptance tests on macOS 26 and 27
+- the permission probes pass on a bundle launched by LaunchServices, not on a shell-inherited identity
+- a signed build keeps its Accessibility grant from one build to the next
+- the release binary passes the closed-list gate on every build
+promotion_criteria:
+- to: spec-published
+  when: the public repository is anonymously cloneable and reproduces the exact private state attested
+    in Governance, with no extra reference or object
+- to: usable-verifiable
+  when: the required layout matrix passes on a signed build, installed and used for a sustained period,
+    with the permission probes green
+- to: proven
+  when: several people use it on their own machines, with measured latency and a published comparison
+    against the reference tools
+kill_predicates:
+- id: public-data-leak
+  predicate: a secret, a signing identity, a machine path or a personal identifier reaches the public history
+  source: scripts/check-binary.sh
+- id: network-surface
+  predicate: the release binary imports a network symbol or declares a URL scheme
+  source: scripts/symbols.allowlist
+- id: permission-overclaim
+  predicate: a permission or a behaviour is published as working without its probe having passed on the exact macOS version
+  source: PROTOCOL.txt
+benchmark:
+  product: Rectangle and Loop, as references only; no code is taken from them
+phases:
+- id: e0-skeleton
+  title: Skeleton and first layout
+  exit_criteria:
+  - id: core-and-golden
+    text: The Rust core passes its tests and the Swift shell executes the golden vectors through the bridge.
+    weight: 4
+    status: accepted
+    evidence:
+      date: '2026-10-09'
+      reference: probes/results/tests/swift-final.txt
+  - id: binary-gate
+    text: The release bundle passes the closed symbol list, entitlement and URL scheme gate, and the gate fails on the E2E build.
+    weight: 3
+    status: accepted
+    evidence:
+      date: '2026-10-09'
+      reference: probes/results/p6/release-run2.txt
+  - id: frozen-app-bounded
+    text: A frozen application never blocks the shell beyond the declared timeout.
+    weight: 3
+    status: accepted
+    evidence:
+      date: '2026-10-09'
+      reference: probes/results/p3/host-20261009T074417Z.txt
+- id: permission-probes
+  title: Permissions measured on a real bundle
+  exit_criteria:
+  - id: event-tap-permission
+    text: The Accessibility-only case of the event tap probe is measured on a bundle launched by LaunchServices.
+    weight: 4
+    status: pending
+  - id: hotkey-delivery
+    text: Carbon hotkey delivery is measured on an idle session.
+    weight: 3
+    status: pending
+  - id: grant-persistence
+    text: The Accessibility grant survives a rebuild signed with the local identity.
+    weight: 4
+    status: pending
+- id: required-matrix
+  title: Required layout matrix
+  exit_criteria:
+  - id: matrix-layouts
+    text: Every layout of the required matrix passes its acceptance test.
+    weight: 8
+    status: pending
+  - id: multi-screen
+    text: Placement is correct across several screens, including a portrait one.
+    weight: 4
+    status: pending
+- id: publication
+  title: Public repository sealed
+  exit_criteria:
+  - id: private-attestation
+    text: The complete private clone is attested in Governance before any public exposure (ADR-0038).
+    weight: 5
+    status: pending
