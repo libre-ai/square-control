@@ -11,7 +11,7 @@ crate-type = ["staticlib", "lib"]
 
 [dependencies]
 layout = { path = "../layout" }
-uniffi = { version = "=0.32.1", default-features = false }
+uniffi = { version = "=0.32.2", default-features = false }
 
 # No workspace lints: the UniFFI scaffolding expands to `unsafe extern "C"` items, which
 # `forbid(unsafe_code)` would reject; this crate holds no hand-written unsafe.
