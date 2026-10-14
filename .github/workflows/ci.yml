@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: 2026 Libre AI contributors
+# SPDX-License-Identifier: Apache-2.0
+name: ci
+
+# Gates that run on a Linux runner: the pure Rust core (layout) and the UniFFI
+# bridge build, lint and test there by design (NFR-Q4), and the dependency policy
+# is the fleet's reusable gate. The Swift shell, the binary gate and the probes
+# need macOS and a window server; they run locally (scripts/check.sh covers the
+# parts of this file, probes/run.sh the rest) and are not claimed by this workflow.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dependency-policy:
+    uses: libre-ai/project-governance/.github/workflows/reusable-dependency-policy.yml@0db2e10e3ea785c31c101914483ed501ec4cbb7a
+  rust:
+    name: Rust core and bridge
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.97.0
+          components: clippy, rustfmt
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Lint
+        run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - name: Test
+        run: cargo test --locked --workspace

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 Libre AI contributors
+# SPDX-License-Identifier: Apache-2.0
+name: Context hygiene
+
+# Fleet invariant: blocks private identifiers and machine-local paths from
+# entering the public tree (reusable governed workflow, pinned by commit).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  context-hygiene:
+    uses: libre-ai/project-governance/.github/workflows/reusable-context-hygiene.yml@0db2e10e3ea785c31c101914483ed501ec4cbb7a

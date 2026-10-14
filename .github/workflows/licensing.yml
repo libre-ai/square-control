@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Libre AI contributors
+# SPDX-License-Identifier: Apache-2.0
+name: licensing
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  licensing:
+    uses: libre-ai/project-governance/.github/workflows/reusable-licensing.yml@0db2e10e3ea785c31c101914483ed501ec4cbb7a
+    with:
+      tooling_ref: 0db2e10e3ea785c31c101914483ed501ec4cbb7a
