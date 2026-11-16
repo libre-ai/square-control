@@ -75,6 +75,9 @@ kill_predicates:
   source: PROTOCOL.txt
 benchmark:
   product: Rectangle and Loop, as references only; no code is taken from them
+products:
+- id: P40
+  code: crates/layout
 phases:
 - id: e0-skeleton
   title: Skeleton and first layout
@@ -117,6 +120,8 @@ phases:
     status: pending
 - id: required-matrix
   title: Required layout matrix
+  product: P40
+  delivers: A person can place the focused window on every layout of the required matrix, with the right frame on each of several screens, a portrait one included.
   exit_criteria:
   - id: matrix-layouts
     text: Every layout of the required matrix passes its acceptance test.
