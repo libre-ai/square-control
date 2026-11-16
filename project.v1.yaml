@@ -81,8 +81,6 @@ products:
 phases:
 - id: e0-skeleton
   title: Skeleton and first layout
-  product: P40
-  delivers: A person can build the release bundle, see it pass the closed symbol list, entitlement and URL scheme gate, and see the core compute the left-half frame of every golden vector in Rust and in Swift.
   exit_criteria:
   - id: core-and-golden
     text: The Rust core passes its tests and the Swift shell executes the golden vectors through the bridge.
