@@ -36,7 +36,7 @@ non_goals:
 dependencies:
 - 'on': libre-ai/project-governance
   why: Fleet doctrine and reusable workflow templates.
-  pinned: github:libre-ai/project-governance#a00daec8d10419f266a9611f589c606858ca86b3
+  pinned: github:libre-ai/project-governance#fb4a20fa7b0cd0eef76b59c55e22d6e73817bcd7
 - 'on': uniffi
   why: Rust to Swift bridge, confined to crates/ffi.
   pinned: 0.32.1
