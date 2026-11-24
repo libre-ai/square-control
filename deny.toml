@@ -18,6 +18,17 @@ deny = [
   { name = "reqwest" }, { name = "hyper" }, { name = "ureq" }, { name = "openssl-sys" },
 ]
 
+[advisories]
+# cargo-deny 0.22.0 changes the default of `unmaintained` from "all" to "workspace"; stating it
+# keeps transitive unmaintained crates reported whichever version runs.
+unmaintained = "all"
+# Waivers follow libre-ai/project-governance docs/security/ADVISORY-WAIVER-POLICY.md: dated,
+# referenced, bounded. The anchor is the date the list was last read against the resolved graph.
+# waiver-review-anchor: 2026-11-24
+ignore = [
+  "RUSTSEC-2026-0374", # basic-toml unmaintained, reached only by tools/uniffi-bindgen (bindings generator, not shipped) through the askama_derive 0.16.1 proc-macro, absent from the sc_ffi graph; no patched version, askama_derive 0.16.1 and uniffi 0.32.2 are the latest releases; expires=2027-02-24; ref=https://rustsec.org/advisories/RUSTSEC-2026-0374
+]
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
