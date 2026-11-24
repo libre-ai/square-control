@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   dependency-policy:
-    uses: libre-ai/project-governance/.github/workflows/reusable-dependency-policy.yml@a00daec8d10419f266a9611f589c606858ca86b3
+    uses: libre-ai/project-governance/.github/workflows/reusable-dependency-policy.yml@fb4a20fa7b0cd0eef76b59c55e22d6e73817bcd7
   rust:
     name: Rust core and bridge
     runs-on: ubuntu-24.04
