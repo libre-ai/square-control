@@ -18,6 +18,11 @@ deny = [
   { name = "reqwest" }, { name = "hyper" }, { name = "ureq" }, { name = "openssl-sys" },
 ]
 
+[advisories]
+# cargo-deny 0.22.0 changes the default of `unmaintained` from "all" to "workspace"; stating it
+# keeps transitive unmaintained crates reported whichever version runs.
+unmaintained = "all"
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
